@@ -9,7 +9,5 @@
 ### https://datos.gob.cl/dataset/desembarque-artesanal-2019-preliminar/resource/54f706f3-21c3-4aef-973e-fbde83ac0007
 
 
-git pull https://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@github.com/Jscarrascoa/Tarea_Diplomado.git
 
-git push https://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@github.com/Jscarrascoa/Tarea_Diplomado.git
 
