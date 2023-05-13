@@ -41,16 +41,32 @@ dataset3 <- dataset2 %>%
 
 #Resumen del dataset3
 ```{r resumen3}
-summary(dataset3)
+summary(dataset3$Kilos)
+```
+#convierto a numerico
+```{r resumen3}
+dataset3$Kilos <- as.numeric(dataset3$Kilos)
+summary(dataset3$Kilos)
+class(dataset3$Kilos)
 ```
 
-# histograma
+#Elimino las filas con la region 99 que no especificaban datos
+```{r elimiNAR }
+subset_dataset <- dataset3 %>%
+  filter(Region != 99)
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-```{r hist}
-ggplot(dataset2, aes(x=Kilos)) +
-  geom_histogram(binwidth=2, color="black", fill="white") +
-  labs(title="Histograma de la variable 'Kilos'",
-       x="Meses", y="Kilos")
+
+# Grafico de barras 
+
+```{r barras}
+ggplot(subset_dataset, aes(x = Region)) +
+  geom_bar() +
+  labs(title = "Distribución de desembarco por región") +
+  xlab("Regiones") +
+  ylab("Frecuencia") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8))
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
