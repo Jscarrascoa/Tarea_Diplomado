@@ -2,7 +2,9 @@
 Titulo: Analisis exploratorio Desembarque artesanal por recurso y especie
 autor: Jorge Carrasco
 Fecha: "09-05-2023"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include = FALSE}
@@ -14,10 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ##resumen
-
-```{r resumen}
+```{r resumen, include = FALSE}
 summary(dataset)
-
 ```
 
 ##Usamos la función gather, para unificar los meses en una columna.
@@ -27,8 +27,30 @@ dataset2 <- gather(data = dataset, key = "Meses", value = "Kilos", 6:17)
 dataset2 <- select(dataset2, -TOTAL) #Eliminamos el total
 ```
 
+
+# Realizamos nuevamente el resumen
+
+```{r summary dataset2}
+summary(dataset2)
+```
+#Reemplazo los NA por 0
+```{r reemplazo los NA}
+dataset3 <- dataset2 %>% 
+  mutate(Kilos = ifelse(is.na(Kilos), 0, Kilos))
+```
+
+#Resumen del dataset3
+```{r resumen3}
+summary(dataset3)
+```
+
 # histograma
 
 ```{r hist}
+ggplot(dataset2, aes(x=Kilos)) +
+  geom_histogram(binwidth=2, color="black", fill="white") +
+  labs(title="Histograma de la variable 'Kilos'",
+       x="Meses", y="Kilos")
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
