@@ -1,0 +1,34 @@
+---
+Titulo: Analisis exploratorio Desembarque artesanal por recurso y especie
+autor: Jorge Carrasco
+Fecha: "09-05-2023"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##resumen
+
+```{r resumen}
+summary(dataset)
+
+```
+
+##Usamos la función gather, para unificar los meses en una columna.
+
+```{r gather}
+dataset2 <- gather(data = dataset, key = "Meses", value = "Kilos", 6:17)
+dataset2 <- select(dataset2, -TOTAL) #Eliminamos el total
+```
+
+# histograma
+
+```{r hist}
+```
+
