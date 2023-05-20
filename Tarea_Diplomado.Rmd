@@ -28,7 +28,7 @@ h1 {
 
 #### Autor: Jorge Carrasco
 
-#### Profesor: José Gallardo - María Angelica Rueda
+#### Profesores: José Gallardo - María Angelica Rueda
 
 ### [**Descripción del problema**]{.underline}
 
@@ -73,36 +73,39 @@ summary(dataset2)
 ```
 #### Evidenciamos NA en los valores de la variable Kilos, los cuales necesitamos reemplazar por 0.
 
-#Reemplazo los NA por 0
-
-```{r reemplazo los NA, include = FALSE}
+```{r reemplazo los NA, echo=TRUE}
 dataset3 <- dataset2 %>% 
   mutate(Kilos = ifelse(is.na(Kilos), 0, Kilos))
+summary(dataset3)
 ```
 
-#Resumen del dataset3
+#### Otro proceso necesario es convertir nuestra variable "Kilos" a numerica
 
-```{r resumen32, include = FALSE}
-summary(dataset3$Kilos)
-```
-
-#convierto a numerico
-
-```{r resumen3, include = FALSE}
+```{r resumen3, echo=TRUE}
 dataset3$Kilos <- as.numeric(dataset3$Kilos)
-summary(dataset3$Kilos)
 class(dataset3$Kilos)
 ```
 
-#Elimino las filas con la region 99 que no especificaban datos
+#### En la base de datos tambien tenemos otros valores atipicos por ejemplo: en la variable Region tenemos la Region 99, la cual no especifica "Provincia", "Caleta" ni "Comuna",  Eliminamos las filas con la region 99 que no especificaban datos y creamos nuestro ultimo DF.
 
-```{r Eliminar99, include = FALSE }
+```{r Eliminar99, echo=TRUE}
 subset_dataset <- dataset3 %>%
   filter(Region != 99)
+summary(subset_dataset)
+```
+#### Ahora nuestros datos estan bien categorizados.
 
+
+#### Describimos la variación de las variables de estudio usando histogramas
+
+```{r histograma, include = TRUE}
+ggplot(subset_dataset, aes(x = Kilos)) +
+  geom_histogram(fill = "steelblue", color = "white") +
+  labs(title = "Histograma de Kilos",
+       x = "Kilos",
+       y = "Frecuencia")
 ```
 
-# Grafico de barras
 
 ```{r barras, include = TRUE}
 ggplot(subset_dataset, aes(x = Region)) +

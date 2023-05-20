@@ -9,3 +9,5 @@
 ## Link de la base de datos :
 
 ### <https://datos.gob.cl/dataset/desembarque-artesanal-2019-preliminar/resource/54f706f3-21c3-4aef-973e-fbde83ac0007>
+
+#### La base de datos definitiva post limpieza de datos queda en 109.452 observaciones con 7 variables.
