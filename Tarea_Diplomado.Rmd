@@ -15,36 +15,63 @@ library(tidyr)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# [Tarea Diplomado]{.underline}
+```{=html}
+<style>
+h1 {
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+}
+</style>
+```
+# [**Tarea Diplomado**]{.underline}
 
-### Jorge Carrasco
+#### Autor: Jorge Carrasco
 
-## Cargar los datos
+#### Profesor: José Gallardo - María Angelica Rueda
 
-```{r cargar, include = FALSE}
+### [**Descripción del problema**]{.underline}
+
+```{=html}
+<style>
+h5 {
+  text-align: justify;
+}
+</style>
+```
+##### Analizar la base de datos de origen publico, La cual especifica la cantidad de kilos de distintas especies de recursos extraibles del mar, la idea es poder lograr pronosticar en una serie de tiempo la cantidad de kilos maximos a extrar por mes de cada recurso, con el fin de poder planificar de mejor manera la logistica y el area comercial para el negocio.
+
+##### [**Estos datos provienen del siguiente URL:**]{.underline}
+
+[Link de la base de datos](https://datos.gob.cl/dataset/desembarque-artesanal-2019-preliminar "URL")
+
+```{r cargar, echo=TRUE}
 dataset <- read_csv("Desembarque por caleta y recurso.csv")
-knitr::opts_chunk$set(echo = FALSE)
+
 ```
 
-## resumen
+#### [Realizamos la primera exploración de datos:]{.underline}
 
-```{r resumen, include = FALSE}
-summary(dataset)
-knitr::opts_chunk$set(echo = FALSE)
+
+```{r resumen, echo=TRUE}
+head(dataset)
 ```
 
-## Usamos la función gather, para unificar los meses en una columna.
+
+#### Usamos la función gather, para unificar los meses y los kilos en una sola columna, ademas eliminamos la columna Total.(creamos un nuevo dataset)
 
 ```{r gather}
 dataset2 <- gather(data = dataset, key = "Meses", value = "Kilos", 6:17)
 dataset2 <- select(dataset2, -TOTAL) #Eliminamos el total
+head(dataset2)
 ```
 
-# Realizamos nuevamente el resumen
+#### A nuestra nueva base de datos realizamos un resumen.
 
-```{r resumen2, include = FALSE}
+```{r resumen2, echo=TRUE}
 summary(dataset2)
 ```
+#### Evidenciamos NA en los valores de la variable Kilos, los cuales necesitamos reemplazar por 0.
 
 #Reemplazo los NA por 0
 
@@ -72,7 +99,7 @@ class(dataset3$Kilos)
 ```{r Eliminar99, include = FALSE }
 subset_dataset <- dataset3 %>%
   filter(Region != 99)
-knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 # Grafico de barras
@@ -84,5 +111,4 @@ ggplot(subset_dataset, aes(x = Region)) +
   xlab("Regiones") +
   ylab("Frecuencia") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8))
-knitr::opts_chunk$set(echo = TRUE)
 ```
