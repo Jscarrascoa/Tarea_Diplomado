@@ -1,13 +1,13 @@
 ---
-Titulo: Analisis exploratorio Desembarque artesanal por recurso y especie
-autor: Jorge Carrasco
-Fecha: "09-05-2023"
+Title: Analisis exploratorio Desembarque artesanal por recurso y especie
+Author: Jorge Carrasco
+Date: "20-05-2023"
 output:
-  html_document: default
-  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
-```{r setup, include = FALSE}
+```{r librerias, include = FALSE}
 library(readr)
 library(ggplot2)
 library(dplyr)
@@ -15,52 +15,69 @@ library(tidyr)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##resumen
-```{r resumen, include = FALSE}
-summary(dataset)
+# [Tarea Diplomado]{.underline}
+
+### Jorge Carrasco
+
+## Cargar los datos
+
+```{r cargar, include = FALSE}
+dataset <- read_csv("Desembarque por caleta y recurso.csv")
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-##Usamos la función gather, para unificar los meses en una columna.
+## resumen
+
+```{r resumen, include = FALSE}
+summary(dataset)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Usamos la función gather, para unificar los meses en una columna.
 
 ```{r gather}
 dataset2 <- gather(data = dataset, key = "Meses", value = "Kilos", 6:17)
 dataset2 <- select(dataset2, -TOTAL) #Eliminamos el total
 ```
 
-
 # Realizamos nuevamente el resumen
 
-```{r summary dataset2}
+```{r resumen2, include = FALSE}
 summary(dataset2)
 ```
+
 #Reemplazo los NA por 0
-```{r reemplazo los NA}
+
+```{r reemplazo los NA, include = FALSE}
 dataset3 <- dataset2 %>% 
   mutate(Kilos = ifelse(is.na(Kilos), 0, Kilos))
 ```
 
 #Resumen del dataset3
-```{r resumen3}
+
+```{r resumen32, include = FALSE}
 summary(dataset3$Kilos)
 ```
+
 #convierto a numerico
-```{r resumen3}
+
+```{r resumen3, include = FALSE}
 dataset3$Kilos <- as.numeric(dataset3$Kilos)
 summary(dataset3$Kilos)
 class(dataset3$Kilos)
 ```
 
 #Elimino las filas con la region 99 que no especificaban datos
-```{r elimiNAR }
+
+```{r Eliminar99, include = FALSE }
 subset_dataset <- dataset3 %>%
   filter(Region != 99)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Grafico de barras
 
-# Grafico de barras 
-
-```{r barras}
+```{r barras, include = TRUE}
 ggplot(subset_dataset, aes(x = Region)) +
   geom_bar() +
   labs(title = "Distribución de desembarco por región") +
@@ -69,4 +86,3 @@ ggplot(subset_dataset, aes(x = Region)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8))
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
