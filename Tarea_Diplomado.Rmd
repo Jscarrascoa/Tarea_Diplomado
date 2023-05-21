@@ -14,6 +14,7 @@ library(dplyr)
 library(tidyr)
 library(readxl)
 library(gridExtra)
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -63,8 +64,22 @@ head(dataset)
 #### Usamos la función gather, para unificar los meses y los kilos en una sola columna, ademas eliminamos la columna Total.(creamos un nuevo dataset)
 
 ```{r gather}
+
 dataset2 <- gather(data = dataset, key = "Meses", value = "Kilos", 6:17)
 dataset2 <- select(dataset2, -Total) #Eliminamos el total
+
+
+# Definir la función para eliminar puntos y separadores de miles
+eliminar_puntos <- function(numero_decimal) {
+  numero_entero <- as.integer(gsub("\\D", "", numero_decimal))
+  return(numero_entero)
+}
+
+# Aplicar la función a la variable "Kilos" de la base de datos "dataset"
+dataset <- dataset2 %>%
+  mutate(Kilos_enteros = eliminar_puntos(Kilos))
+
+
 head(dataset2)
 ```
 
@@ -136,17 +151,29 @@ hist(especie_reineta$Kilos,col = "lightgreen", xlab = "Kilos", ylab = "Frecuenci
 
 ```
 
+#### Veamos si los datos estan balanceados en una tabla de Frecuencia
 
+```{r Tabla_Frecuencia, include = TRUE}
 
+# Crear tabla de frecuencia para la variable Especie y Kilos
+tabla_frecuencia <- table(RankingEspecies$Especie, RankingEspecies$Kilos)
 
+# Convertir la tabla de frecuencia en un dataframe
+df_tabla_frecuencia <- as.data.frame.matrix(tabla_frecuencia)
 
+# Agregar estadísticas a la tabla de frecuencia
+df_tabla_frecuencia <- df_tabla_frecuencia %>%
+  mutate(Suma = rowSums(.),
+         Promedio = rowMeans(.),
+         Desviacion = apply(., 1, sd))
 
+# Imprimir la tabla de frecuencia utilizando kable
+kable(df_tabla_frecuencia)
 
-```{r barras, include = TRUE}
-ggplot(subset_dataset, aes(x = Region)) +
-  geom_bar() +
-  labs(title = "Distribución de desembarco por región") +
-  xlab("Regiones") +
-  ylab("Frecuencia") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8))
+```
+```{r Tabla_Boxplot, include = TRUE}
+ggplot(RankingEspecies, aes(x = Especie, y = Kilos)) +
+  geom_boxplot() +
+  labs(x = "Especie", y = "Kilos") +
+  ggtitle("Boxplot de Kilos por Especie")
 ```
