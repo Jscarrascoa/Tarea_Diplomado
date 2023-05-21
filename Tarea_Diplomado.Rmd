@@ -79,6 +79,8 @@ eliminar_puntos <- function(numero_decimal) {
 dataset <- dataset2 %>%
   mutate(Kilos_enteros = eliminar_puntos(Kilos))
 
+dataset2 <- dataset2 %>%
+  mutate(Toneladas = Kilos / 1000)
 
 head(dataset2)
 ```
@@ -140,14 +142,14 @@ especie_reineta <- RankingEspecies[RankingEspecies$Especie == "REINETA", ]
 
 ```{r Especies_graficos, echo=TRUE}
 
-hist(especie_sardina$Kilos,col = "steelblue", xlab = "Kilos", ylab = "Frecuencia",
-     main = "Histograma de Kilos para SARDINA COMUN")
+hist(especie_sardina$Toneladas,col = "steelblue", xlab = "Toneladas", ylab = "Frecuencia",
+     main = "Histograma de Toneladas para SARDINA COMUN")
 
-hist(especie_anchoveta$Kilos,col = "lightblue", xlab = "Kilos", ylab = "Frecuencia",
-     main = "Histograma de Kilos para ANCHOVETA")
+hist(especie_anchoveta$Toneladas,col = "lightblue", xlab = "Toneladas", ylab = "Frecuencia",
+     main = "Histograma de Toneladas para ANCHOVETA")
 
-hist(especie_reineta$Kilos,col = "lightgreen", xlab = "Kilos", ylab = "Frecuencia",
-     main = "Histograma de Kilos para REINETA")
+hist(especie_reineta$Toneladas,col = "lightgreen", xlab = "Toneladas", ylab = "Frecuencia",
+     main = "Histograma de Toneladas para REINETA")
 
 ```
 
@@ -156,7 +158,7 @@ hist(especie_reineta$Kilos,col = "lightgreen", xlab = "Kilos", ylab = "Frecuenci
 ```{r Tabla_Frecuencia, include = TRUE}
 
 # Crear tabla de frecuencia para la variable Especie y Kilos
-tabla_frecuencia <- table(RankingEspecies$Especie, RankingEspecies$Kilos)
+tabla_frecuencia <- table(RankingEspecies$Especie, RankingEspecies$Toneladas)
 
 # Convertir la tabla de frecuencia en un dataframe
 df_tabla_frecuencia <- as.data.frame.matrix(tabla_frecuencia)
@@ -172,8 +174,8 @@ kable(df_tabla_frecuencia)
 
 ```
 ```{r Tabla_Boxplot, include = TRUE}
-ggplot(RankingEspecies, aes(x = Especie, y = Kilos)) +
+ggplot(RankingEspecies, aes(x = Especie, y = Toneladas)) +
   geom_boxplot() +
-  labs(x = "Especie", y = "Kilos") +
+  labs(x = "Especie", y = "Toneladas") +
   ggtitle("Boxplot de Kilos por Especie")
 ```
