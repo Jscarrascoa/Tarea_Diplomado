@@ -12,6 +12,8 @@ library(readr)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(readxl)
+library(gridExtra)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -46,7 +48,7 @@ h5 {
 [Link de la base de datos](https://datos.gob.cl/dataset/desembarque-artesanal-2019-preliminar "URL")
 
 ```{r cargar, echo=TRUE}
-dataset <- read_csv("Desembarque por caleta y recurso.csv")
+dataset <- read_xlsx("Desembarque por caleta y recurso.xlsx")
 
 ```
 
@@ -62,7 +64,7 @@ head(dataset)
 
 ```{r gather}
 dataset2 <- gather(data = dataset, key = "Meses", value = "Kilos", 6:17)
-dataset2 <- select(dataset2, -TOTAL) #Eliminamos el total
+dataset2 <- select(dataset2, -Total) #Eliminamos el total
 head(dataset2)
 ```
 
@@ -95,16 +97,49 @@ summary(subset_dataset)
 ```
 #### Ahora nuestros datos estan bien categorizados.
 
+#### Eligiremos las 3 Especies mas comunes en su captura, como lo son la "SARDINA COMUN", "ANCHOVETA" Y "REINETA".
 
-#### Describimos la variación de las variables de estudio usando histogramas
-
-```{r histograma, include = TRUE}
-ggplot(subset_dataset, aes(x = Kilos)) +
-  geom_histogram(fill = "steelblue", color = "white") +
-  labs(title = "Histograma de Kilos",
-       x = "Kilos",
-       y = "Frecuencia")
+```{r Especies, echo=TRUE}
+# Filtrar las observaciones por especie
+RankingEspecies <- subset_dataset[subset_dataset$Especie %in% c("SARDINA COMUN", "ANCHOVETA", "REINETA"), ]
 ```
+
+#### Describimos la variación de las variables de estudio usando histogramas para cada especie.
+
+
+```{r Especiessardina, echo=TRUE}
+#Antes de Graficar Filtramos por especie
+
+
+# Filtrar solo la especie "SARDINA COMUN"
+especie_sardina <- RankingEspecies[RankingEspecies$Especie == "SARDINA COMUN", ]
+
+# Filtrar solo la especie "SARDINA COMUN"
+especie_anchoveta <- RankingEspecies[RankingEspecies$Especie == "ANCHOVETA", ]
+
+# Filtrar solo la especie "REINETA"
+especie_reineta <- RankingEspecies[RankingEspecies$Especie == "REINETA", ]
+
+```
+
+
+```{r Especies_graficos, echo=TRUE}
+
+hist(especie_sardina$Kilos,col = "steelblue", xlab = "Kilos", ylab = "Frecuencia",
+     main = "Histograma de Kilos para SARDINA COMUN")
+
+hist(especie_anchoveta$Kilos,col = "lightblue", xlab = "Kilos", ylab = "Frecuencia",
+     main = "Histograma de Kilos para ANCHOVETA")
+
+hist(especie_reineta$Kilos,col = "lightgreen", xlab = "Kilos", ylab = "Frecuencia",
+     main = "Histograma de Kilos para REINETA")
+
+```
+
+
+
+
+
 
 
 ```{r barras, include = TRUE}
